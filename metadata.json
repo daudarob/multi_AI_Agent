@@ -1,0 +1,7 @@
+{
+  "name": "DAMA Multi-Agent AI Builder",
+  "description": "A production-grade multi-agent platform for Healthcare, Education, and Finance, featuring agent orchestration, safety protocols, and real-time visualization.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
