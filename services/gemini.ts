@@ -936,14 +936,14 @@ Output JSON: {
     let auditData;
     try {
       auditData = JSON.parse(criticRes.text || '{"critique": "Content reviewed", "riskScore": 0.1, "recommendations": [], "approval_required": false}');
-    } catch (e) {
-      auditData = {
-        critique: criticRes.text || "Audit completed",
-        riskScore: 0.2,
-        recommendations: ["Review content for domain compliance"],
-        approval_required: false
-      };
+   } catch (e) {
+      console.warn('Failed to restart speech recognition:', e);
+      if (e instanceof Error && e.message && e.message.includes('already started')) {
+    // Already started, ignore
+      } else {
+        console.error('Speech recognition restart failed:', e instanceof Error ? e.message : String(e));
     }
+
 
     ensembleState.critique = auditData.critique;
     ensembleState.safetyScore = 1.0 - auditData.riskScore;
