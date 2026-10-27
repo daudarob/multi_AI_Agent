@@ -1385,8 +1385,7 @@ export async function connectLiveSession(
       audioContext = null;
     }
 
-    isConnected = false;
-    isListening = false;
+  
     console.log('Mock cleanup complete');
   };
 
