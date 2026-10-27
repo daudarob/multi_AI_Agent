@@ -1545,7 +1545,7 @@ export async function connectLiveSession(
               speechRecognition.start();
             } catch (e) {
               console.warn('Failed to restart speech recognition:', e);
-              if (e.message && e.message.includes('already started')) {
+              if (e instanceof message && e.message.includes('already started')) {
                 // Already started, ignore
               } else {
                 console.error('Speech recognition restart failed:', e);
