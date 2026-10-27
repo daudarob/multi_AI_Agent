@@ -1,6 +1,6 @@
 
 import { GoogleGenAI, Modality, LiveServerMessage } from "@google/genai";
-import { Domain, AgentStep, AgentArtifact, EnsembleState } from "../types";
+import { Domain, AgentStep, AgentArtifact } from "../types";
 import { AGENTS, DOMAIN_CONFIGS } from "../constants";
 
 // Type declarations for Web Speech API
@@ -133,10 +133,10 @@ function generateAIResponse(userInput: string, domain: Domain): string {
 
   // Generic responses for unrecognized input
   const genericResponses = [
-    `I understand you're asking about ${userInput}. As a ${domain.toLowerCase()} assistant, I'm here to help you navigate this topic. Could you provide more details?`,
-    `That's an interesting question about ${userInput}. In the ${domain.toLowerCase()} field, this is an important consideration. What specific aspect would you like me to elaborate on?`,
-    `Regarding ${userInput}, the ${domain.toLowerCase()} domain has much to offer. I'd be happy to share insights and guidance. What would you like to know more about?`,
-    `Your question about ${userInput} touches on key ${domain.toLowerCase()} concepts. I can provide information and context. Is there a particular angle you'd like me to address?`
+    `I understand you're asking about ${userInput}. As a ${String(domain).toLowerCase()} assistant, I'm here to help you navigate this topic. Could you provide more details?`,
+    `That's an interesting question about ${userInput}. In the ${String(domain).toLowerCase()} field, this is an important consideration. What specific aspect would you like me to elaborate on?`,
+    `Regarding ${userInput}, the ${String(domain).toLowerCase()} domain has much to offer. I'd be happy to share insights and guidance. What would you like to know more about?`,
+    `Your question about ${userInput} touches on key ${String(domain).toLowerCase()} concepts. I can provide information and context. Is there a particular angle you'd like me to address?`
   ];
 
   return genericResponses[Math.floor(Math.random() * genericResponses.length)];
@@ -275,7 +275,7 @@ ${domain === Domain.FINANCE ? '- Financial principles with risk considerations' 
 
       yield {
         text: chunk.text,
-        grounding: grounding,
+        grounding: grounding ?? [],
         approvalRequired: false,
         isFinal: false
       };
@@ -722,7 +722,7 @@ Analysis grounded in established principles, research findings, and practical ex
  * GENERATE MOCK GROUNDING DATA
  * Creates realistic source links for demonstration purposes
  */
-function generateMockGrounding(domain: Domain, userInput: string): Array<{title: string, uri: string}> {
+function generateMockGrounding(domain: Domain, _userInput: string): Array<{title: string, uri: string}> {
   const baseUrls = {
     [Domain.HEALTHCARE]: [
       { title: "Mayo Clinic - Patient Care & Health Information", uri: "https://www.mayoclinic.org/" },
@@ -1328,7 +1328,7 @@ export async function connectLiveSession(
 
   // Mock implementation
   let isConnected = false;
-  let isListening = false;
+  
   let speechRecognition: SpeechRecognition | null = null;
   let speechSynthesis: SpeechSynthesis | null = null;
   let audioContext: AudioContext | null = null;
@@ -1336,23 +1336,7 @@ export async function connectLiveSession(
   let isCleaningUp = false;
 
   // Mock responses based on domain
-  const mockResponses = {
-    [Domain.HEALTHCARE]: [
-      "I understand you're asking about health concerns. While I'm a demonstration system, in a real implementation I'd provide medical guidance from verified sources.",
-      "Health questions are important. A full system would consult medical databases and provide evidence-based information.",
-      "This is a mock response. Real healthcare AI would analyze symptoms and provide appropriate medical advice."
-    ],
-    [Domain.EDUCATION]: [
-      "Learning is a wonderful journey! I'd normally provide detailed explanations and educational resources.",
-      "Education systems can offer personalized learning paths and comprehensive subject knowledge.",
-      "This demonstration shows how voice interaction could enhance educational experiences."
-    ],
-    [Domain.FINANCE]: [
-      "Financial decisions require careful consideration. Real systems provide market analysis and investment guidance.",
-      "Financial AI would analyze market trends, risk factors, and provide personalized financial advice.",
-      "Mock mode: Financial consultations require verified data and professional expertise."
-    ]
-  };
+  
 
   const cleanup = async () => {
     if (isCleaningUp) return;
