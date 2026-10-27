@@ -291,7 +291,7 @@ ${domain === Domain.FINANCE ? '- Financial principles with risk considerations' 
     if (requiresApproval) {
       yield {
         text: '',
-        grounding: grounding,
+        grounding: grounding ?? [],
         approvalRequired: true,
         isFinal: true
       };
